@@ -9,11 +9,11 @@
 
   "repository": {
     "type": "git",
-    "url": "git://github.com/hubot-scripts/hubot-tree-planter.git"
+    "url": "git://github.com/genebean/hubot-tree-planter.git"
   },
 
   "bugs": {
-    "url": "https://github.com/hubot-scripts/hubot-tree-planter/issues"
+    "url": "https://github.com/genebean/hubot-tree-planter/issues"
   },
 
   "dependencies": {
