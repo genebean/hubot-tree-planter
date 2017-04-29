@@ -21,8 +21,8 @@ Then add **hubot-tree-planter** to your `external-scripts.json`:
 ## Sample Interaction
 
 ```
-user1>> hubot hello
-hubot>> hello!
+user1>> hubot plant some_repo
+hubot>> Planting some_repo on host.example.com...
 ```
 
 ## NPM Module
