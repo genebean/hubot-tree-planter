@@ -42,7 +42,6 @@ module.exports = (robot) ->
         repo = tree['source']
         url  = "#{tree['destination']}/deploy"
         dst  = url.replace('http://','').replace('https://','').split(/[/?#]/)[0].split(':')[0]
-alert domain
         data = JSON.stringify({
           tree_name: tree,
           repo_url: tree['source']
