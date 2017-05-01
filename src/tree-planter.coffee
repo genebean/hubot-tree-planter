@@ -27,12 +27,16 @@ for key, value of process.env
 
 module.exports = (robot) ->
   robot.hear /tree farm/i, (msg) ->
+    msg.send "Here's the farm's inventroy:"
+
     thefarm = ''
     for tree in farm
-      thefarm += 'nickname    :' + tree['nickname']    + '\n'
-      thefarm += 'source      :' + tree['source']      + '\n'
-      thefarm += 'destination :' + tree['destination'] + '\n'
-      thefarm += 'env. var.   :' + tree['env-var']     + '\n\n'
+      thefarm += 'nickname    : ' + tree['nickname']    + '\n'
+      thefarm += 'source      : ' + tree['source']      + '\n'
+      thefarm += 'destination : ' + tree['destination'] + '\n'
+      thefarm += 'env. var.   : ' + tree['env-var']     + '\n\n'
+
+    msg.send thefarm
 
   robot.respond /plant (\w+)/i, (msg) ->
     nickname = msg.match[1]
