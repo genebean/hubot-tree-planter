@@ -41,7 +41,7 @@ module.exports = (robot) ->
   robot.respond /plant ([\w-]+)/i, (msg) ->
     nickname = msg.match[1]
     for tree in farm
-      if tree['nickname'] is tree
+      if tree['nickname'] is nickname
         tree = tree['source'].split('/').pop().replace(/\.git/, '')
         repo = tree['source']
         url  = "#{tree['destination']}/deploy"
