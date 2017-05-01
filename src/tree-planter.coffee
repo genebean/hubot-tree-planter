@@ -38,7 +38,7 @@ module.exports = (robot) ->
 
     msg.send thefarm
 
-  robot.respond /plant (\w+)/i, (msg) ->
+  robot.respond /plant ([\w-]+)/i, (msg) ->
     nickname = msg.match[1]
     for tree in farm
       if tree['nickname'] is tree
