@@ -64,3 +64,34 @@ module.exports = (robot) ->
             return
 
           msg.send body
+
+  robot.respond /plant ([\w-\/]+) of ([\w-]+)/i, (msg) ->
+    branch   = msg.match[1]
+    nickname = msg.match[2]
+    for tree in farm
+      if tree['nickname'] is nickname
+        repo     = tree['source'].split('/').pop().replace(/\.git/, '')
+        source   = tree['source']
+        endpoint = "#{tree['destination']}/gitlab"
+        dst      = endpoint.replace('http://','').replace('https://','').split(/[/?#]/)[0].split(':')[0]
+        data     = JSON.stringify({
+          ref: "refs/heads/#{branch}",
+          repository:{
+            name: repo,
+            url: source
+          }
+        })
+
+        msg.send "Planting the #{branch} of #{repo} on #{dst}..."
+        msg.http(endpoint)
+        .header('Content-Type', 'application/json')
+        .post(data) (err, res, body) ->
+          if err
+            res.send "Encountered an error :( #{err}"
+            return
+
+          if res.statusCode isnt 200
+            res.send "Request didn't come back HTTP 200 :("
+            return
+
+          msg.send body
