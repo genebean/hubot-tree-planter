@@ -40,10 +40,6 @@ module.exports = (robot) ->
 
   robot.respond /plant ([\w-]+)/i, (msg) ->
     nickname = msg.match[1]
-    #env-var : HUBOT_TREE02
-    #source : https://code.example.com/my/stuff.git
-    #destination : http://app01.example.com:8080
-    #nickname : prod-app-server
     for tree in farm
       if tree['nickname'] is nickname
         repo     = tree['source'].split('/').pop().replace(/\.git/, '')
