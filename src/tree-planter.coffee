@@ -40,19 +40,23 @@ module.exports = (robot) ->
 
   robot.respond /plant ([\w-]+)/i, (msg) ->
     nickname = msg.match[1]
+    #env-var : HUBOT_TREE02
+    #source : https://code.example.com/my/stuff.git
+    #destination : http://app01.example.com:8080
+    #nickname : prod-app-server
     for tree in farm
       if tree['nickname'] is nickname
-        tree = tree['source'].split('/').pop().replace(/\.git/, '')
-        repo = tree['source']
-        url  = "#{tree['destination']}/deploy"
-        dst  = url.replace('http://','').replace('https://','').split(/[/?#]/)[0].split(':')[0]
-        data = JSON.stringify({
-          tree_name: tree,
-          repo_url: tree['source']
+        repo     = tree['source'].split('/').pop().replace(/\.git/, '')
+        source   = tree['source']
+        endpoint = "#{tree['destination']}/deploy"
+        dst      = endpoint.replace('http://','').replace('https://','').split(/[/?#]/)[0].split(':')[0]
+        data     = JSON.stringify({
+          tree_name: repo,
+          repo_url: source
         })
 
-        msg.send "Planting #{tree} on #{dst}..."
-        msg.http(url)
+        msg.send "Planting #{repo} on #{dst}..."
+        msg.http(endpoint)
         .header('Content-Type', 'application/json')
         .post(data) (err, res, body) ->
           if err
