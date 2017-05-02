@@ -2,41 +2,96 @@
 #   Sends messages to tree_planter
 #
 # Configuration:
-#   HUBOT_TREE_REPO_PREFIX - git@code.example.com:user
-#   HUBOT_TREE_DST_HOST    - drhost.example.com
-#   HUBOT_TREE_PORT        - 4080
+#   HUBOT_TREE00           - source,destination,nickname
+#   HUBOT_TREE01           - git@code.example.com:username/repo.git,http://www01.example.com:8080,prod-website
 #
 # Commands:
-#   hubot plant <tree name> - <tree name> is the name of the code tree to deploy
+#   hubot plant <nickname> - deploys the default branch using the /deploy endpoint
+#   hubot plant <branch name> of <nickname> - deploys the feature/new_stuff branch using the /gitlab endpoint
+#   tree farm - displays a list of all known trees that can be planted
 #
 # Author:
-#   genebean
+#   Gene Liverman (genebean)
 
-server = process.env.HUBOT_TREE_REPO_PREFIX
-dst    = process.env.HUBOT_TREE_DST_HOST
-port   = process.env.HUBOT_TREE_PORT ||= 4080
+farm = []
+for key, value of process.env
+  if key.match(/\d+$/)
+    valueparts          = value.split ","
+    tree                = {}
+    tree['env-var']     = key
+    tree['source']      = valueparts[0]
+    tree['destination'] = valueparts[1]
+    tree['nickname']    = valueparts[2]
+    farm.push tree
 
 
 module.exports = (robot) ->
-  robot.respond /plant (\w+)/i, (msg) ->
-    tree = msg.match[1]
-    repo = "#{server}/#{tree}.git"
-    url  = "http://#{dst}:#{port}/deploy"
-    data = JSON.stringify({
-      tree_name: tree,
-      repo_url: repo
-    })
+  robot.hear /tree farm/i, (msg) ->
+    msg.send "Here's the farm's inventroy:"
 
-    msg.send "Planting #{tree} on #{dst}..."
-    msg.http(url)
-    .header('Content-Type', 'application/json')
-    .post(data) (err, res, body) ->
-      if err
-        res.send "Encountered an error :( #{err}"
-        return
+    thefarm = ''
+    for tree in farm
+      thefarm += 'nickname    : ' + tree['nickname']    + '\n'
+      thefarm += 'source      : ' + tree['source']      + '\n'
+      thefarm += 'destination : ' + tree['destination'] + '\n'
+      thefarm += 'env. var.   : ' + tree['env-var']     + '\n\n'
 
-      if res.statusCode isnt 200
-        res.send "Request didn't come back HTTP 200 :("
-        return
+    msg.send thefarm
 
-      msg.send body
+  robot.respond /plant ([\w-]+)/i, (msg) ->
+    nickname = msg.match[1]
+    for tree in farm
+      if tree['nickname'] is nickname
+        repo     = tree['source'].split('/').pop().replace(/\.git/, '')
+        source   = tree['source']
+        endpoint = "#{tree['destination']}/deploy"
+        dst      = endpoint.replace('http://','').replace('https://','').split(/[/?#]/)[0].split(':')[0]
+        data     = JSON.stringify({
+          tree_name: repo,
+          repo_url: source
+        })
+
+        msg.send "Planting #{repo} on #{dst}..."
+        msg.http(endpoint)
+        .header('Content-Type', 'application/json')
+        .post(data) (err, res, body) ->
+          if err
+            res.send "Encountered an error :( #{err}"
+            return
+
+          if res.statusCode isnt 200
+            res.send "Request didn't come back HTTP 200 :("
+            return
+
+          msg.send body
+
+  robot.respond /plant ([\w-\/]+) of ([\w-]+)/i, (msg) ->
+    branch   = msg.match[1]
+    nickname = msg.match[2]
+    for tree in farm
+      if tree['nickname'] is nickname
+        repo     = tree['source'].split('/').pop().replace(/\.git/, '')
+        source   = tree['source']
+        endpoint = "#{tree['destination']}/gitlab"
+        dst      = endpoint.replace('http://','').replace('https://','').split(/[/?#]/)[0].split(':')[0]
+        data     = JSON.stringify({
+          ref: "refs/heads/#{branch}",
+          repository:{
+            name: repo,
+            url: source
+          }
+        })
+
+        msg.send "Planting the #{branch} of #{repo} on #{dst}..."
+        msg.http(endpoint)
+        .header('Content-Type', 'application/json')
+        .post(data) (err, res, body) ->
+          if err
+            res.send "Encountered an error :( #{err}"
+            return
+
+          if res.statusCode isnt 200
+            res.send "Request didn't come back HTTP 200 :("
+            return
+
+          msg.send body
