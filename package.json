@@ -1,7 +1,7 @@
 {
   "name": "hubot-tree-planter",
   "description": "A hubot script for planting trees with tree-planter",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "gene@technicalissues.us",
   "license": "MIT",
 
