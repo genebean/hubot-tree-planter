@@ -15,7 +15,7 @@
 
 farm = []
 for key, value of process.env
-  if key.match(/\d+$/)
+  if key.match(/HUBOT_TREE\d+$/)
     valueparts          = value.split ","
     tree                = {}
     tree['env-var']     = key
