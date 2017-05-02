@@ -7,21 +7,30 @@ helper = new Helper('../src/tree-planter.coffee')
 
 describe 'tree-planter', ->
   beforeEach ->
-    @room = helper.createRoom()
+    @room = helper.createRoom(httpd: false)
 
   afterEach ->
     @room.destroy()
 
-  it 'responds to hello', ->
-    @room.user.say('alice', '@hubot hello').then =>
+  it 'hears tree farm', ->
+    @room.user.say('bob', 'What do we have on the tree farm today?').then =>
       expect(@room.messages).to.eql [
-        ['alice', '@hubot hello']
-        ['hubot', '@alice hello!']
+        ['bob', 'What do we have on the tree farm today?']
+        ['hubot', "Here's the farm's inventroy:"]
+        ['hubot', "nickname    : tree-planter-via-ssh\n
+source      : git@github.com:genebean/tree-planter.git\n
+destination : http://127.0.0.1:8081\n
+env. var.   : HUBOT_TREE02\n\n
+nickname    : tree-planter-via-http\n
+source      : https://github.com/genebean/tree-planter.git\n
+destination : http://127.0.0.1:8081\n
+env. var.   : HUBOT_TREE01\n\n"]
       ]
 
-  it 'hears orly', ->
-    @room.user.say('bob', 'just wanted to say orly').then =>
-      expect(@room.messages).to.eql [
-        ['bob', 'just wanted to say orly']
-        ['hubot', 'yarly']
-      ]
+  # it 'responds to plant tree-planter-via-http', ->
+  #   @room.user.say('alice', '@hubot plant tree-planter-via-http').then =>
+  #     console.log @room.messages
+  #     expect(@room.messages).to.include [
+  #       ['alice', '@hubot plant tree-planter-via-http']
+  #       ['hubot', 'Planting tree-planter on app02.example.com...']
+  #     ]
