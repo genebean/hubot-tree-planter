@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/genebean/hubot-tree-planter.svg?branch=master)](https://travis-ci.org/genebean/hubot-tree-planter)
+
 # hubot-tree-planter
 
 A hubot script for planting trees with tree-planter
