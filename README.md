@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/genebean/hubot-tree-planter.svg?branch=master)](https://travis-ci.org/genebean/hubot-tree-planter)
+[![Dependency Status](https://img.shields.io/gemnasium/genebean/hubot-tree-planter.svg)](https://gemnasium.com/github.com/genebean/hubot-tree-planter)
+[![npm](https://img.shields.io/npm/dt/hubot-tree-planter.svg)](https://www.npmjs.com/package/hubot-tree-planter)
+
+
 # hubot-tree-planter
 
 A hubot script for planting trees with tree-planter

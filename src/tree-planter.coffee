@@ -12,6 +12,14 @@
 #
 # Author:
 #   Gene Liverman (genebean)
+sortByKey = (array, key) ->
+  array.sort (a,b) ->
+    if a[key] < b[key]
+      -1
+    else if a[key] > b[key]
+      1
+    else
+      0
 
 farm = []
 for key, value of process.env
@@ -24,6 +32,7 @@ for key, value of process.env
     tree['nickname']    = valueparts[2]
     farm.push tree
 
+sortByKey(farm, 'nickname')
 
 module.exports = (robot) ->
   robot.hear /tree farm/i, (msg) ->
