@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/genebean/hubot-tree-planter.svg?branch=master)](https://travis-ci.org/genebean/hubot-tree-planter)
+[![Dependency Status](https://img.shields.io/gemnasium/genebean/hubot-tree-planter.svg)](https://gemnasium.com/github.com/genebean/hubot-tree-planter)
+
 
 # hubot-tree-planter
 
