@@ -36,9 +36,7 @@ sortByKey(farm, 'nickname')
 
 module.exports = (robot) ->
   robot.hear /tree farm/i, (msg) ->
-    msg.send "Here's the farm's inventroy:"
-
-    thefarm = ''
+    thefarm = "Here's the farm's inventroy:\n"
     for tree in farm
       thefarm += 'nickname    : ' + tree['nickname']    + '\n'
       thefarm += 'source      : ' + tree['source']      + '\n'
